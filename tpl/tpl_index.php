@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map</title>
-    <link rel="stylesheet" href="assets/css/style.css"/>
-    <link rel="stylesheet" href="assets/css/leaflet.css"/>
-    <script src="assets/js/leaflet.js" ></script>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/leaflet.css<?="?v=".rand(100,9999) ?>"/>
+    <script src="assets/js/leaflet.js" <?php echo"?v=".rand(100,9999) ?>></script>
 </head>
 <body>
     <div class="main">
@@ -24,20 +24,7 @@
         </div>
     
 
-        <script>
-
-            const map = L.map('map').setView([35.31900, 46.94897], 13);
-        
-            const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: ' <a href="https://www.tarafdari.com.</a>'
-            }).addTo(map);
-        
-
-            document.getElementById('map').style.setProperty('height',window.innerHeight + 'px');
-        
-        
-        </script>
+       <script src="assets/js/script.js"></script>
         
 </body>
 </html>
