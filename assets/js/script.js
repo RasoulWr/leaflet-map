@@ -41,15 +41,21 @@ L.marker([35.7581166,51.3640]).addTo(map).bindPopup("رستوران داش نص�
 // });
 
 
-// map.on("dblclick",function(event){
-    
-//     L.marker([event.latlng.lat,event.latlng.lng]).addTo(map);
-//     // 1: add marker in clicked position
-//     // 2: open modal (form) for save the cliked position
-//     // 3: fill the form and submit location for send to server
-//     // 4: save location in database (status : pending review)
-//     // 5: review location and verify if ok 
-// })
+ map.on("dblclick",function(event){
+alert(event.latlng.lat +","+event.latlng.lng)
+// 1: add marker in clicked position
+L.marker([event.latlng.lat,event.latlng.lng]).addTo(map);
+// 2: open modal (form) for save the cliked position
+$('.modal-overlay').fadeIn(1000);
+$('#lat-display').val(event.latlng.lat);
+$('#lng-display').val(event.latlng.lng);
+// 3: fill the form and submit location for send to server
+$('#l-type').val(0);
+$('#l-title').val('');
+$('.ajax-result').html('');
+// done 4: save location in database (status : pending review)
+// done 5: review location and verify if ok 
+ })
 
 
 
@@ -73,7 +79,7 @@ function locate() {
     map.locate({ setView: true, maxZoom: defaultZoom });
 }
 
-setInterval(locate,5000);
+//setInterval(locate,5000);
 
 
 
@@ -97,18 +103,31 @@ setInterval(locate,5000);
 //     alert("Location access denied.");
 // });
 
-
-
-
-
-
 //L.marker([35.28119,47.419]).addTo(map).bindPopup("موقیت مکانی من");
 
 
-    
+//bellow code used for submmited form and force to send by ajax
+
+$(document).ready(function() {
+    $('form#addLocationForm').submit(function(e) {
+        e.preventDefault(); // prevent form submiting
+        var form = $(this);
+        var resultTag = form.find('.ajax-result');
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: form.serialize(),
+            success: function(response) {
+                resultTag.html(response);
+            }
+        });
+    });
 
 
-
+    $('.modal-overlay .close').click(function() {
+        $('.modal-overlay').fadeOut();
+    });
+});
 
 
 
