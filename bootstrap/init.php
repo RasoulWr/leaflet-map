@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "constant.php";
 include ROOT_PATH . "bootstrap/config.php";
 include ROOT_PATH ."libs/helpers.php";
@@ -11,3 +12,5 @@ try{
 } catch(PDOException $e){
     die("connection is faild!!"."{$e->getMessage()}"."in line {$e->getLine()}");
 }
+
+include ROOT_PATH."libs/lib-usres.php";

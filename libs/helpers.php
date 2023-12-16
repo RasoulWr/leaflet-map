@@ -17,3 +17,7 @@ function isAjaxRequst(){
         return false;
     }
 }
+
+function error($msg){
+    echo "<p style= 'background: #c7bbbb; padding-top: 31px; padding-bottom: 30px; padding-left: 5px; margin-top: 5px; width: 100%; text-align: center; font-size: 30px; color: red';> {$msg}</p>";
+}
