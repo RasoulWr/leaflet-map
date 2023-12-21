@@ -32,7 +32,7 @@
                     <span class="close"> X</span>
                     <h3 class="modal-title"> ثبت مکان</h3>
                     <div class="modal-content">
-                <form id="addLocationForm" action="<?= ROOT_PATH."process/addLocation.php" ?>"  method="post">
+                <form id="addLocationForm" action="<?= BASE_URL."process/addLocation.php" ?>"  method="post" >
                     <div class="field-row">
                         <div class="field-title">مختصات</div>
                         <div class="field-content">
@@ -59,7 +59,7 @@
                     <div class="field-row">
                         <div class="field-title">درخواست ثبت</div>
                         <div class="field-content">
-                            <input id="" type="submit" value="ثبت">
+                            <input id='' type="submit" value="ثبت" >
                         </div>
                     </div>
                     <div class="ajax-result"></div>
@@ -74,7 +74,13 @@
         </div>
         <!-- jquery loading -->
        <script src="assets/js/jquery.min.js"></script>
-       <script src="assets/js/script.js"></script>
+       <script src="assets/js/script.js"></script> <!-- for seprating js code from this html code  -->
+    
+       <script>
+        <?php if($location):?>
+        L.marker([<?= $location->lat?>,<?= $location->lng ?>]).addTo(map).bindPopup("<?= $location->title ?>").openPopup();
+        <?php endif ?>
+       </script>
         
 </body>
 </html>

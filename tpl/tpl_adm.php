@@ -1,3 +1,7 @@
+<?php 
+use Hekmatinasser\Verta\Verta; // use pakage for convert geogeration to jalali
+?> 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7Map Panel</title>
     <link href="favicon.png" rel="shortcut icon" type="image/png">
-
-    <link rel="stylesheet" href="assets/css/styles.css<?="?v=" . rand(99, 9999999)?>" />
+    <link rel="stylesheet" href="assets/css/styles.css<?="?v=".rand(99, 9999999)?>" />
     <style>
     body{
         background:#f2f2f2;
@@ -18,11 +21,22 @@
         text-align: center;
     }
 
+    .modal-overlay .modal {
+    width: 70%;
+    height: 300px;
+    background: #fff;
+    padding: 67px;
+    border-radius: 7px;
+    margin-top: -426px;
+    position: relative;
+}
+
     .main-panel{
         width:1000px;
         margin:30px auto;
     }
     .box {
+        direction: rtl;
         background: #fff;
         padding: 10px 20px;
         border-radius: 5px;
@@ -30,6 +44,7 @@
         margin-bottom: 20px;
     }
     table.tabe-locations {
+        direction: rtl;
         width: 100%;
         border-collapse: collapse;
     }
@@ -45,6 +60,11 @@
         font-family: iransans;
         display:inline-block;
         margin:0 3px;
+    }
+
+    a.statusToggle.all {
+    background: blue;
+    color: white;
     }
     .statusToggle.active {
         background: #0c8f10;
@@ -76,6 +96,8 @@
     .text-center{
         text-align: center;
     }
+
+    
     </style>
 </head>
 <body>
@@ -83,35 +105,36 @@
         <h1>پنل مدیریت <span style="color:#007bec">سون مپ</span></h1>
         <div class="box">
             <a class="statusToggle" href="<?=BASE_URL?>" target="_blank">🏠</a>
-            <a class="statusToggle active" href="?status=1">فعال</a>
-            <a class="statusToggle" href="?status=0">غیرفعال</a>
-            <a class="statusToggle" href="?logout=1" style="float:left" target="_blank">خروج</a>
+            <a class="statusToggle all" href="<?= BASE_URL.'adm.php'?>">همه</a>
+            <a class="statusToggle active" href="?verified=1">فعال</a>
+            <a class="statusToggle" href="?verified=0">غیرفعال</a>
+            <a class="statusToggle" href="?logout=1" style="float:left;" onMouseOver="this.style.color='red'" target="_blank">خروج</a>
         </div>
         <div class="box">
         <table class="tabe-locations">
         <thead>
         <tr>
-        <th style="width:40%">عنوان مکان</th>
+        <th style="width:20%">عنوان مکان</th>
         <th style="width:15%" class="text-center">تاریخ ثبت</th>
         <th style="width:10%" class="text-center">lat</th>
         <th style="width:10%" class="text-center">lng</th>
-        <th style="width:25%">وضعیت</th>
+        <th style="width:15%">وضعیت</th>
         </tr>
         </thead>
         <tbody>
-        <?php for($i=0;$i<10;$i++): ?>
+        <?php foreach($locations as $location): ?>
         <tr>
-            <td>نام مکان اینجا</td>
-            <td class="text-center">12 خرداد 95</td>
-            <td class="text-center">25.454</td>
-            <td class="text-center">34.456</td>
+            <td><?= $location->title?></td>
+            <td class="text-center"><?=  Verta::instance($location->created_at)->format(' %d،%B،%Y');; ?></td>
+            <td class="text-center"><?= $location->lat?> </td>
+            <td class="text-center"><?= $location->lng ?></td>
             <td>
-                <button class="statusToggle active" data-loc='111'>فعال</button> 
-                <button class="statusToggle" data-loc='111'>غیر فعال</button> 
-                <button class="preview" data-loc='111'>👁️‍🗨️</button> 
+                <button class="statusToggle  <?= $location->verified ? "active" : ""?>" data-loc='<?= $location->id ?>' > 
+                تایید</button> 
+                <button class="preview" data-loc='<?= $location->id ?>'>👁️‍🗨️</button> 
             </td>
         </tr>
-<?php endfor; ?>        
+         <?php endforeach; ?>        
         </tbody>
         </table>
         </div>
@@ -120,7 +143,7 @@
 
     <div class="modal-overlay" style="display: none;">
         <div class="modal">
-            <span class="close">x</span>
+            <span class="close" style=" font-size: 30px; color: red;">x</span>
             <div class="modal-content">
                 <iframe id='mapWivdow' src="#" frameborder="0"></iframe>
             </div>
@@ -134,7 +157,21 @@
     $(document).ready(function() {
         $('.preview').click(function() {
             $('.modal-overlay').fadeIn();
-            $('#mapWivdow').attr('src','<?=BASE_URL?>');
+            $('#mapWivdow').attr('src','<?=BASE_URL.'?locId='?>'+$(this).attr('data-loc'));
+        });
+        $('.statusToggle').click(function(){
+            const btn = $(this);
+            $.ajax({
+                url: '<?= BASE_URL.'process/statusToggle.php' ?>',
+                method:'POST',
+                data: {locationId:btn.attr('data-loc')},
+                success: function(response){
+                    if(response == 1){
+                        btn.toggleClass('active'); // if this tag have active class than removed this class and if not have active class so assings
+                    }
+                    
+                }
+            })
         });
         $('.modal-overlay .close').click(function() {
             $('.modal-overlay').fadeOut();

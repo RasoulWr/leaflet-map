@@ -1,0 +1,10 @@
+{
+    "name": "rasoul/map",
+    "description": "composer for map project",
+    "type": "project",
+    "require": {
+        "hekmatinasser/verta": "^8.3"
+    },
+    "license": "MIT",
+    "minimum-stability": "stable"
+}

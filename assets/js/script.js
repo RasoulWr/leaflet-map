@@ -53,6 +53,7 @@ $('#lng-display').val(event.latlng.lng);
 $('#l-type').val(0);
 $('#l-title').val('');
 $('.ajax-result').html('');
+
 // done 4: save location in database (status : pending review)
 // done 5: review location and verify if ok 
  })
@@ -109,6 +110,7 @@ function locate() {
 //bellow code used for submmited form and force to send by ajax
 
 $(document).ready(function() {
+    
     $('form#addLocationForm').submit(function(e) {
         e.preventDefault(); // prevent form submiting
         var form = $(this);
@@ -119,15 +121,26 @@ $(document).ready(function() {
             data: form.serialize(),
             success: function(response) {
                 resultTag.html(response);
+                       
+                //  $('.modal-overlay').fadeOut(3000);
             }
-        });
+
+        })
+       
     });
 
+
+
+
+    
 
     $('.modal-overlay .close').click(function() {
         $('.modal-overlay').fadeOut();
     });
 });
+
+
+
 
 
 
