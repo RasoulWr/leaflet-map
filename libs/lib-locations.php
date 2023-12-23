@@ -17,15 +17,16 @@
 
 // get all location
 
-function getLocations($params = null){
+function getLocations($params = []){
   global $pdo;
   $condition = '';
-  if($params == '1'){
-    $condition = "WHERE verified = 1";
-  }elseif($params == '0'){
-    $condition = "WHERE verified = 0";
-  }
+  if(isset($params['verified']) and in_array($params['verified'],['0','1'])){
+    $condition = "WHERE verified = {$params['verified']}";
+  } elseif(isset($params['keyword'])){
+    $condition = "WHERE verified = 1 and title like '%{$params['keyword']}%'";
+   }
   $sql = "SELECT * FROM locations $condition";
+ 
   $stmt = $pdo->prepare($sql);
   $stmt ->execute();
   $tupels = $stmt->fetchAll(PDO::FETCH_OBJ);

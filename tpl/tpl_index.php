@@ -14,18 +14,18 @@
 </head>
 <body>
     <div class="main">
-        <div class="head">
-            <div class="search-box">
-            <input type="text" id="search" placeholder="دنبال کجا می گردی؟" autocomplete="off">
-            <div class="clear"></div>
-            <div class="search-results" style="display:none"></div>
-            </div>
-            </div>
+    <div class="head">
+        <div class="search-box">
+        <input type="text" id="search" placeholder="دنبال کجا می گردی؟">
+        <div class="clear"></div>
+        <div class="search-results"> </div>
+        </div>
+    </div>
             <div class="mapContainer">
                 <div id="map"></div>
             </div>
             <img src="assets/img/current.png" class="currentLoc">
-            
+    </div>    
 
             <div class="modal-overlay" style="display:none;">
                 <div class="modal">
@@ -71,7 +71,7 @@
 
     </div>
 
-        </div>
+        
         <!-- jquery loading -->
        <script src="assets/js/jquery.min.js"></script>
        <script src="assets/js/script.js"></script> <!-- for seprating js code from this html code  -->
@@ -80,6 +80,25 @@
         <?php if($location):?>
         L.marker([<?= $location->lat?>,<?= $location->lng ?>]).addTo(map).bindPopup("<?= $location->title ?>").openPopup();
         <?php endif ?>
+
+        $(document).ready(function(){
+            $('.currentLoc').click(function(){
+                locate();
+            });
+
+            $('#search').keyup(function(){
+                const input = $(this);
+                const searchResult = $('.search-results');
+                $.ajax({
+                    url : '<?= BASE_URL.'process/search.php'?>',
+                    method : 'POST',
+                    data : {keyword: input.val()},
+                    success : function(response){
+                        searchResult.html(response);
+                    }
+                })
+            })
+        })
        </script>
         
 </body>

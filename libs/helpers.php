@@ -21,7 +21,7 @@ function isAjaxRequst(){
 function error($msg){
     echo "<p style= 'background: #c7bbbb; padding-top: 31px; padding-bottom: 30px; padding-left: 5px; margin-top: 5px; width: 100%; text-align: center; font-size: 30px; color: red';> {$msg}</p>";
 }
-
+// dump and die
 function dd($tasks){
     echo "<pre style = 'background: #ffffff; color: #1668e4; font-size: 15px; padding: 15px 15px; margin: 5px 10px; border-radius: 7px; border-left: 2px  solid brown; border-right: 2px  solid brown; z-index: 999; position: relative;'>";
     var_dump($tasks);
