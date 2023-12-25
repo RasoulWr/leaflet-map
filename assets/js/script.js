@@ -81,34 +81,75 @@ function locate() {
 }
 
 //setInterval(locate,5000);
-
-
-
-
-// map.locate({setView: true, watch: true}) /* This will return map so you can do chaining */
-//   .on('locationfound', function(e){
-//     var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
-//     var circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
-//         weight: 1,
-//         color: 'blue',
-//         fillColor: '#cacaca',
-//         fillOpacity: 0.2
-//     });
-//     map.addLayer(marker);
-//     map.addLayer(circle);
-//     // marker.addTo(map);1
-//     // circle.addTo(map);
-// })
-//   .on('locationerror', function(e){
-//     console.log(e);
-//     alert("Location access denied.");
-// });
-
 //L.marker([35.28119,47.419]).addTo(map).bindPopup("موقیت مکانی من");
 
+// calculate distance between two points
 
-//bellow code used for submmited form and force to send by ajax
+let
+_firstLatLng, //holding first marker latitude and longitude
+_secondLatLng,//holding second marker latitude and longitude
+_polyline,    //holding polyline object
+merkerA= null,
+markerB = null;
+map.on('click', function(e) {
+    if (!_firstLatLng) {
 
+        //get first point latitude and longitude
+        _firstLatLng = e.latlng;
+
+        //create first marker and add popup
+        markerA = L.marker(_firstLatLng).addTo(map).bindPopup('مکان اول<br/>' + e.latlng).openPopup();
+
+
+    } else if (!_secondLatLng) {
+        //get second point latitude and longitude
+        _secondLatLng = e.latlng;
+
+
+        //create second marker and add popup
+        markerB = L.marker(_secondLatLng).addTo(map).bindPopup('مکان دوم<br/>' + e.latlng).openPopup();
+
+
+        //draw a line between two points
+        _polyline = L.polyline([_firstLatLng, _secondLatLng], {
+            color: 'red'
+        });
+
+        //add the line to the map
+        _polyline.addTo(map);
+        //get the distance between two points
+        let _length = map.distance(_firstLatLng, _secondLatLng);
+
+        //display the result
+        document.getElementById('length').innerHTML = (_length/1000).toFixed(2) + ' کیلومتر';
+    } else {
+
+        //if already we have two points first we remove the polyline object
+        if (_polyline) {
+            map.removeLayer(_polyline);
+            _polyline = null;
+        }
+
+        //get new point latitude and longitude
+        _firstLatLng = e.latlng;
+
+        //remove previous markers and values for second point
+        map.removeLayer(markerA);
+        map.removeLayer(markerB);
+        _secondLatLng = null;
+
+        //create new marker and add it to map
+        markerA = L.marker(_firstLatLng).addTo(map).bindPopup('مکان اول<br/>' + e.latlng).openPopup();
+
+    }
+
+ 
+});
+
+
+
+
+//below code used for submmited form and force to send by ajax
 $(document).ready(function() {
     
     $('form#addLocationForm').submit(function(e) {

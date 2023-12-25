@@ -19,8 +19,16 @@
         <input type="text" id="search" placeholder="دنبال کجا می گردی؟">
         <div class="clear"></div>
         <div class="search-results"> </div>
+        <div class="result">
+            فاصله دو مکان :
+            <span id="length"></span>
         </div>
+        </div>
+        
     </div>
+    
+    
+       
             <div class="mapContainer">
                 <div id="map"></div>
             </div>
